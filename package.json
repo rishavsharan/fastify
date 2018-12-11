@@ -120,7 +120,7 @@
     "flatstr": "^1.0.8",
     "light-my-request": "^3.0.0",
     "middie": "^3.2.0",
-    "pino": "^5.0.0",
+    "pino": "^5.10.0",
     "proxy-addr": "^2.0.3",
     "tiny-lru": "^4.0.1"
   },
