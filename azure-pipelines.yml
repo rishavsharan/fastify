@@ -1,10 +1,25 @@
-jobs:
-- template: azure-pipelines-yarn-template.yml
-  parameters:
-    name: Linux_Yarn
-    vmImage: ubuntu-16.04
+pool: AgentDemo
 
-- template: azure-pipelines-npm-template.yml
-  parameters:
-    name: Windows_NPM
-    vmImage: vs2017-win2016
+strategy:
+  matrix:
+    node_11_x:
+      node_version: 11.x
+  maxParallel: 5
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '11.0'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install && npm run test:report && npm run unit:junit
+  displayName: 'npm install and test'
+  continueOnError: true
+
+- task: PublishTestResults@2
+  displayName: "Publish Test Results"
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: "**test/junit-testresults.xml"
+    testRunTitle: TestRun ${{ parameters.name }} $(node_version)
